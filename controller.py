@@ -109,7 +109,7 @@ def load_checkpoint():
     assert os.path.isfile(args.resume), 'Error: no checkpoint file found!'
 
     checkpoint = torch.load(args.resume)
-    best_acc = checkpoint['best_acc']
+    # best_acc = checkpoint['best_acc']
     start_epoch = checkpoint['epoch']
     model.load_state_dict(checkpoint['state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer'])
@@ -181,14 +181,14 @@ def eval(data_loader, is_test=False):
             total_loss += loss
             n += 1
 
-            _, predicted = torch.max(outputs.data, 1)
-            total += targets.size(0)
-            correct += (predicted.cpu() == targets.cpu()).sum()
+            # _, predicted = torch.max(outputs.data, 1)
+            # total += targets.size(0)
+            # correct += (predicted.cpu() == targets.cpu()).sum()
 
-    avg_test_acc = 100 * correct / total
+    # avg_test_acc = 100 * correct / total
     avg_loss = total_loss / n
 
-    return avg_test_acc, avg_loss
+    return 0, avg_loss
 
 
 # Training / Eval loop
@@ -208,25 +208,25 @@ for epoch in range(start_epoch, n_epochs):
     avg_test_acc, avg_loss = eval(val_loader)
 
     print('\nEvaluation:')
-    print('\tVal Acc: %.2f - Loss: %.4f' % (avg_test_acc.item(), avg_loss.item()))
-    print('\tCurrent best val acc: %.2f' % best_acc)
+    print('\tVal Loss: %.4f' % avg_loss.item())
+    # print('\tCurrent best val acc: %.2f' % best_acc)
 
     # Log epoch to tensorboard
     # See log using: tensorboard --logdir='logs' --port=6006
     # util.logEpoch(logger, model, epoch + 1, avg_loss, avg_test_acc)
 
     # Save model
-    if avg_test_acc > best_acc:
-        print('\tSaving checkpoint - Acc: %.2f' % avg_test_acc)
-        best_acc = avg_test_acc
-        best_loss = avg_loss
-        util.save_checkpoint({
-            'epoch': epoch + 1,
-            'state_dict': model.state_dict(),
-            'acc': avg_test_acc,
-            'best_acc': best_acc,
-            'optimizer': optimizer.state_dict(),
-        }, args.model, args.depth)
+    # if avg_test_acc > best_acc:
+    #     print('\tSaving checkpoint - Acc: %.2f' % avg_test_acc)
+    #     best_acc = avg_test_acc
+    #     best_loss = avg_loss
+    #     util.save_checkpoint({
+    #         'epoch': epoch + 1,
+    #         'state_dict': model.state_dict(),
+    #         'acc': avg_test_acc,
+    #         'best_acc': best_acc,
+    #         'optimizer': optimizer.state_dict(),
+    #     }, args.model, args.depth)
 
     # Decaying Learning Rate
     if (epoch + 1) % args.lr_decay_freq == 0:
