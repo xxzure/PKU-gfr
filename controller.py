@@ -166,8 +166,12 @@ def eval(data_loader, is_test=False):
             inputs = np.stack(inputs, axis=1)
 
             inputs = torch.from_numpy(inputs)
+            targets = np.stack(targets, axis=1)
 
-            inputs, targets = inputs.cuda(device), targets.cuda(device)
+            targets = torch.from_numpy(targets)
+            targets = targets.float()
+
+            # inputs, targets = inputs.cuda(device), targets.cuda(device)
             inputs, targets = Variable(inputs), Variable(targets)
 
             # compute output
