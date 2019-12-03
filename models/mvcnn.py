@@ -16,7 +16,7 @@ class MVCNN(nn.Module):
     def __init__(self, num_classes=1000):
         super(MVCNN, self).__init__()
         self.features = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
+            nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
             nn.Conv2d(64, 192, kernel_size=5, padding=2),
@@ -39,6 +39,8 @@ class MVCNN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, num_classes),
         )
+        self.rnn = nn.RNN(256,64,1)
+        self.out = nn.Linear(64,2)
 
     def forward(self, x):
         x = x.transpose(0, 1)
@@ -47,16 +49,25 @@ class MVCNN(nn.Module):
         
         for v in x:
             v = self.features(v)
-            v = v.view(v.size(0), 256 * 6 * 6)
             
+            v = v.view(v.size(0), 256 * 1 * 1)
+            # [8, 256]
             view_pool.append(v)
         
-        pooled_view = view_pool[0]
-        for i in range(1, len(view_pool)):
-            pooled_view = torch.max(pooled_view, view_pool[i])
+        view_pool = torch.stack(view_pool)
+        # print(view_pool.shape)
+        out,h = self.rnn(view_pool)
+        # print(out.shape)
+        # print(h.shape)
+        predict = self.out(out)
+        predict = torch.squeeze(predict[-1::])
+        # pooled_view = view_pool[0]
+        # for i in range(1, len(view_pool)):
+        #     pooled_view = torch.max(pooled_view, view_pool[i])
         
-        pooled_view = self.classifier(pooled_view)
-        return pooled_view
+        # pooled_view = self.classifier(pooled_view)
+        # return pooled_view
+        return predict
 
 
 def mvcnn(pretrained=False, **kwargs):
