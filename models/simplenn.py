@@ -34,14 +34,15 @@ class SIMPLENN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, 2),
         )
-        self.rnn = nn.LSTM(4096,512,1)
+        self.rnn = nn.LSTM(4096,512,2)
         self.out = nn.Sequential(
             nn.Linear(512, 128),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(128, 32),
-            nn.ReLU(inplace=True),
-            nn.Linear(32, 2),
+            nn.Linear(128, 2),
+            # nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            # nn.Linear(32, 2),
         )
 
     def forward(self, x):
