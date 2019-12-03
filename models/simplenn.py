@@ -1,20 +1,15 @@
 import torch
 import torch.nn as nn
-import torch.utils.model_zoo as model_zoo
 
 
-__all__ = ['MVCNN', 'mvcnn']
+__all__ = ['SIMPLENN', 'simplenn']
 
 
-model_urls = {
-    'alexnet': 'https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth',
-}
 
+class SIMPLENN(nn.Module):
 
-class MVCNN(nn.Module):
-
-    def __init__(self, num_classes=1000):
-        super(MVCNN, self).__init__()
+    def __init__(self):
+        super(SIMPLENN, self).__init__()
         self.features = nn.Sequential(
             nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2),
             nn.ReLU(inplace=True),
@@ -37,21 +32,26 @@ class MVCNN(nn.Module):
             nn.Dropout(),
             nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
-            nn.Linear(4096, num_classes),
+            nn.Linear(4096, 2),
         )
-        self.rnn = nn.RNN(256,128,3)
-        self.out = nn.Linear(64,2)
+        self.rnn = nn.RNN(4096,512,2)
+        self.out = nn.Sequential(
+            nn.Linear(512, 128),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(128, 32),
+            nn.ReLU(inplace=True),
+            nn.Linear(32, 2),
+        )
 
     def forward(self, x):
         x = x.transpose(0, 1)
-        
         view_pool = []
         
         for v in x:
-            v = self.features(v)
+            # v = self.features(v)
             
-            v = v.view(v.size(0), 256 * 1 * 1)
-            # [8, 256]
+            v = v.view(v.size(0), 64*64*1)
             view_pool.append(v)
         
         view_pool = torch.stack(view_pool)
@@ -70,20 +70,6 @@ class MVCNN(nn.Module):
         return predict
 
 
-def mvcnn(pretrained=False, **kwargs):
-    r"""MVCNN model architecture from the
-    `"Multi-view Convolutional..." <hhttp://vis-www.cs.umass.edu/mvcnn/docs/su15mvcnn.pdf>`_ paper.
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-    """
-    model = MVCNN(**kwargs)
-    if pretrained:
-        pretrained_dict = model_zoo.load_url(model_urls['alexnet'])
-        model_dict = model.state_dict()
-        # 1. filter out unnecessary keys
-        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict and v.shape == model_dict[k].shape}
-        # 2. overwrite entries in the existing state dict
-        model_dict.update(pretrained_dict)
-        # 3. load the new state dict
-        model.load_state_dict(model_dict)
+def simplenn(pretrained=False, **kwargs):
+    model = SIMPLENN(**kwargs)
     return model

@@ -13,18 +13,20 @@ import os
 
 from models.resnet import *
 from models.mvcnn import *
+from models.simplenn import *
 import util
 # from logger import Logger
 from custom_dataset import MultiViewDataSet
 
 MVCNN = 'mvcnn'
 RESNET = 'resnet'
-MODELS = [RESNET,MVCNN]
+SIMPLENN = 'simplenn'
+MODELS = [RESNET,MVCNN,SIMPLENN]
 
 parser = argparse.ArgumentParser(description='MVCNN-PyTorch')
 parser.add_argument('--data', default='data', metavar='DIR', help='path to dataset')
 parser.add_argument('--depth', choices=[18, 34, 50, 101, 152], type=int, metavar='N', default=101, help='resnet depth (default: resnet18)')
-parser.add_argument('--model', '-m', metavar='MODEL', default=MVCNN, choices=MODELS,
+parser.add_argument('--model', '-m', metavar='MODEL', default=SIMPLENN, choices=MODELS,
                     help='pretrained model: ' + ' | '.join(MODELS) + ' (default: {})'.format(RESNET))
 parser.add_argument('--epochs', default=100, type=int, metavar='N', help='number of total epochs to run (default: 100)')
 parser.add_argument('-b', '--batch-size', default=8, type=int,
@@ -77,8 +79,11 @@ if args.model == RESNET:
     else:
         raise Exception('Specify number of layers for resnet in command line. --resnet N')
     print('Using ' + args.model + str(args.depth))
-else:
+elif args.model == MVCNN:
     model = mvcnn(pretrained=args.pretrained)
+    print('Using ' + args.model)
+elif args.model == SIMPLENN:
+    model = simplenn()
     print('Using ' + args.model)
 
 model.to(device)
