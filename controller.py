@@ -35,7 +35,7 @@ parser.add_argument('--lr', '--learning-rate', default=0.001, type=float,
                     metavar='LR', help='initial learning rate (default: 0.0001)')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum (default: 0.9)')
-parser.add_argument('--lr-decay-freq', default=20, type=float,
+parser.add_argument('--lr-decay-freq', default=40, type=float,
                     metavar='W', help='learning rate decay (default: 30)')
 parser.add_argument('--lr-decay', default=0.1, type=float,
                     metavar='W', help='learning rate decay (default: 0.1)')
