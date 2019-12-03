@@ -178,8 +178,8 @@ def eval(data_loader, is_test=False):
 
             # compute output
             outputs = model(inputs)
-            print(outputs)
-            print(targets)
+            print("outputs:",outputs)
+            print("targets:",targets)
             loss = criterion(outputs, targets)
 
             total_loss += loss
@@ -210,7 +210,7 @@ for epoch in range(start_epoch, n_epochs):
     print('Time taken: %.2f sec.' % (time.time() - start))
 
     model.eval()
-    avg_test_acc, avg_loss = eval(val_loader)
+    avg_loss = eval(val_loader)
 
     print('\nEvaluation:')
     print('\tVal Loss: %.4f' % avg_loss.item())
