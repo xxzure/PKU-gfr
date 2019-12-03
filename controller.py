@@ -28,7 +28,7 @@ parser.add_argument('--data', default='data', metavar='DIR', help='path to datas
 parser.add_argument('--depth', choices=[18, 34, 50, 101, 152], type=int, metavar='N', default=101, help='resnet depth (default: resnet18)')
 parser.add_argument('--model', '-m', metavar='MODEL', default=SIMPLENN, choices=MODELS,
                     help='pretrained model: ' + ' | '.join(MODELS) + ' (default: {})'.format(RESNET))
-parser.add_argument('--epochs', default=500, type=int, metavar='N', help='number of total epochs to run (default: 100)')
+parser.add_argument('--epochs', default=200, type=int, metavar='N', help='number of total epochs to run (default: 100)')
 parser.add_argument('-b', '--batch-size', default=8, type=int,
                     metavar='N', help='mini-batch size (default: 4)')
 parser.add_argument('--lr', '--learning-rate', default=0.001, type=float,
@@ -181,8 +181,8 @@ def eval(data_loader, is_test=False):
 
             # compute output
             outputs = model(inputs)
-            print("outputs:",outputs)
-            print("targets:",targets)
+            # print("outputs:",outputs)
+            # print("targets:",targets)
             loss = criterion(outputs, targets)
 
             total_loss += loss
