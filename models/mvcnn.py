@@ -39,8 +39,9 @@ class MVCNN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, num_classes),
         )
-        self.rnn = nn.RNN(256,64,3)
-        self.out = nn.Linear(64,2)
+        self.rnn = nn.RNN(256,128,1)
+        self.out1 = nn.Linear(128,32)
+        self.out2 = nn.Linear(32,2)
 
     def forward(self, x):
         x = x.transpose(0, 1)
@@ -59,7 +60,8 @@ class MVCNN(nn.Module):
         out,h = self.rnn(view_pool)
         # print(out.shape)
         # print(h.shape)
-        predict = self.out(out)
+        out = self.out1(out)
+        predict = self.out2(out)
         predict = torch.squeeze(predict[-1::])
         # pooled_view = view_pool[0]
         # for i in range(1, len(view_pool)):
