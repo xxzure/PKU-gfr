@@ -37,7 +37,7 @@ parser.add_argument('--lr-decay-freq', default=30, type=float,
                     metavar='W', help='learning rate decay (default: 30)')
 parser.add_argument('--lr-decay', default=0.1, type=float,
                     metavar='W', help='learning rate decay (default: 0.1)')
-parser.add_argument('--print-freq', '-p', default=10, type=int,
+parser.add_argument('--print-freq', '-p', default=5, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('-r', '--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
@@ -131,7 +131,8 @@ def train():
         targets = targets.float()
         
         # GPU!!!
-        # inputs, targets = inputs.cuda(device), targets.cuda(device)
+        if torch.cuda.is_available():
+            inputs, targets = inputs.cuda(device), targets.cuda(device)
         inputs, targets = Variable(inputs), Variable(targets)
 
         # compute output
@@ -170,12 +171,15 @@ def eval(data_loader, is_test=False):
 
             targets = torch.from_numpy(targets)
             targets = targets.float()
-
-            # inputs, targets = inputs.cuda(device), targets.cuda(device)
+            
+            if torch.cuda.is_available():
+                inputs, targets = inputs.cuda(device), targets.cuda(device)
             inputs, targets = Variable(inputs), Variable(targets)
 
             # compute output
             outputs = model(inputs)
+            print(outputs)
+            print(targets)
             loss = criterion(outputs, targets)
 
             total_loss += loss
@@ -188,8 +192,9 @@ def eval(data_loader, is_test=False):
     # avg_test_acc = 100 * correct / total
     avg_loss = total_loss / n
 
-    return 0, avg_loss
+    return avg_loss
 
+h_state = None
 
 # Training / Eval loop
 if args.resume:
