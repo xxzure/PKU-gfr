@@ -111,7 +111,7 @@ class ResNet(nn.Module):
         self.avgpool = nn.AvgPool2d(2, stride=1) #nn.AdaptiveAvgPool2d(7)
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
-        self.rnn = nn.RNN(512,64,2,dropout=0.5)
+        self.rnn = nn.RNN(2048,64,1)
         self.out = nn.Linear(64,2)
         
 
@@ -161,6 +161,7 @@ class ResNet(nn.Module):
         
             v = self.avgpool(v)
             v = v.view(v.size(0), -1)
+            # print(v.shape)
             # [4, 512] 
             view_pool.append(v)
         
