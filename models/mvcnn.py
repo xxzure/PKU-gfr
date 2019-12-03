@@ -39,7 +39,7 @@ class MVCNN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, num_classes),
         )
-        self.rnn = nn.RNN(256,64,1)
+        self.rnn = nn.RNN(256,64,3)
         self.out = nn.Linear(64,2)
 
     def forward(self, x):
