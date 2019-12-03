@@ -9,7 +9,7 @@ class MultiViewDataSet(Dataset):
         df=pd.read_csv('gfr.csv')
         data_dict = {}      
         def map_dict(item):
-            data_dict[item["name"]] = [item["left"],item["right"]]
+            data_dict[item["name"]] = [item["left"],item["right"],item["all"]]
         df.apply(map_dict,axis=1)
         
         return data_dict
@@ -31,7 +31,7 @@ class MultiViewDataSet(Dataset):
                 for view in os.listdir(root + '/' + data_type + '/' + item):
                     views.append(root + '/' + data_type + '/' + item + '/' + view)
                 self.x.append(views)
-                self.gfr.append([self.data_dict[item][0],self.data_dict[item][1]])
+                self.gfr.append([self.data_dict[item][0],self.data_dict[item][1],self.data_dict[item][2]])
 
     # Override to give PyTorch access to any image on the dataset
     def __getitem__(self, index):

@@ -39,7 +39,7 @@ class SIMPLENN(nn.Module):
             nn.Linear(512, 128),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(128, 2),
+            nn.Linear(128, 3),
             # nn.ReLU(inplace=True),
             # nn.Dropout(),
             # nn.Linear(32, 2),
