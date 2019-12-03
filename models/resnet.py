@@ -111,7 +111,7 @@ class ResNet(nn.Module):
         self.avgpool = nn.AvgPool2d(2, stride=1) #nn.AdaptiveAvgPool2d(7)
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
-        self.rnn = nn.RNN(512,64,1)
+        self.rnn = nn.RNN(512,64,2,dropout=0.5)
         self.out = nn.Linear(64,2)
         
 
@@ -167,6 +167,8 @@ class ResNet(nn.Module):
         # view_pool: [20, 4, 512] 
         view_pool = torch.stack(view_pool)
         out,h = self.rnn(view_pool)
+        # print(out.shape)
+        # print(h.shape)
         predict = self.out(out)
         predict = torch.squeeze(predict[-1::])
         
