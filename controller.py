@@ -26,10 +26,10 @@ parser.add_argument('--data', default='data', metavar='DIR', help='path to datas
 parser.add_argument('--depth', choices=[18, 34, 50, 101, 152], type=int, metavar='N', default=18, help='resnet depth (default: resnet18)')
 parser.add_argument('--model', '-m', metavar='MODEL', default=RESNET, choices=MODELS,
                     help='pretrained model: ' + ' | '.join(MODELS) + ' (default: {})'.format(RESNET))
-parser.add_argument('--epochs', default=100, type=int, metavar='N', help='number of total epochs to run (default: 100)')
+parser.add_argument('--epochs', default=500, type=int, metavar='N', help='number of total epochs to run (default: 100)')
 parser.add_argument('-b', '--batch-size', default=4, type=int,
                     metavar='N', help='mini-batch size (default: 4)')
-parser.add_argument('--lr', '--learning-rate', default=0.0001, type=float,
+parser.add_argument('--lr', '--learning-rate', default=0.01, type=float,
                     metavar='LR', help='initial learning rate (default: 0.0001)')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum (default: 0.9)')
@@ -62,25 +62,23 @@ dset_val = MultiViewDataSet(args.data, 'test', transform=transform)
 val_loader = DataLoader(dset_val, batch_size=args.batch_size, shuffle=True)
 
 gfr = dset_train.gfr
-# classes = dset_train.classes
-numClasses = 20
 
 if args.model == RESNET:
     if args.depth == 18:
-        model = resnet18(pretrained=args.pretrained, num_classes=numClasses)
+        model = resnet18()
     elif args.depth == 34:
-        model = resnet34(pretrained=args.pretrained, num_classes=numClasses)
+        model = resnet34()
     elif args.depth == 50:
-        model = resnet50(pretrained=args.pretrained, num_classes=numClasses)
+        model = resnet50()
     elif args.depth == 101:
-        model = resnet101(pretrained=args.pretrained, num_classes=numClasses)
+        model = resnet101()
     elif args.depth == 152:
-        model = resnet152(pretrained=args.pretrained, num_classes=numClasses)
+        model = resnet152()
     else:
         raise Exception('Specify number of layers for resnet in command line. --resnet N')
     print('Using ' + args.model + str(args.depth))
 else:
-    model = mvcnn(pretrained=args.pretrained,num_classes=numClasses)
+    model = mvcnn()
     print('Using ' + args.model)
 
 model.to(device)
