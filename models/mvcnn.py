@@ -39,8 +39,8 @@ class MVCNN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, num_classes),
         )
-        self.rnn = nn.LSTM(256,64,3)
-        self.out = nn.Linear(64,2)
+        self.rnn = nn.LSTM(256,64,3,bidirectional=True)
+        self.out = nn.Linear(128,2)
 
     def forward(self, x):
         x = x.transpose(0, 1)
