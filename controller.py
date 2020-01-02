@@ -181,8 +181,8 @@ def eval(data_loader, is_test=False):
 
             # compute output
             outputs = model(inputs)
-            # print("outputs:",outputs)
-            # print("targets:",targets)
+            print("outputs:",outputs)
+            print("targets:",targets)
             loss = criterion(outputs, targets)
 
             total_loss += loss
