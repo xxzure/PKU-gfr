@@ -34,11 +34,11 @@ class SIMPLENN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, 2),
         )
-        self.rnn = nn.LSTM(4096,512,2)
+        self.rnn = nn.LSTM(4096,256,2)
         self.out = nn.Sequential(
-            nn.Linear(512, 256),
-            nn.ReLU(inplace=True),
-            nn.Dropout(),
+            # nn.Linear(512, 256),
+            # nn.ReLU(inplace=True),
+            # nn.Dropout(),
             nn.Linear(256, 64),
             nn.ReLU(inplace=True),
             nn.Dropout(),
