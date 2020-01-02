@@ -34,18 +34,19 @@ class SIMPLENN(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(4096, 2),
         )
-        self.rnn = nn.LSTM(4096,128,3)
+        self.rnn = nn.LSTM(4096,512,2)
         self.out = nn.Sequential(
-            nn.Linear(128, 64),
+            nn.Linear(512, 128),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(64, 3),
-            # nn.ReLU(inplace=True),
-            # nn.Dropout(),
-            # nn.Linear(32, 2),
+            nn.Linear(128, 32),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(32, 3),
         )
 
     def forward(self, x):
+        print(x.shape)
         x = x.transpose(0, 1)
         view_pool = []
         

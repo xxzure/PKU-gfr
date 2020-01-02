@@ -9,7 +9,7 @@ class MultiViewDataSet(Dataset):
         df=pd.read_csv('gfr.csv')
         data_dict = {}      
         def map_dict(item):
-            data_dict[item["name"]] = [item["left"],item["right"],item["all"]]
+            data_dict[item["name"]] = [item["gfr_left"],item["gfr_right"],item["gfr_all"]]
         df.apply(map_dict,axis=1)
         
         return data_dict
