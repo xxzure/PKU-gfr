@@ -52,7 +52,7 @@ class SIMPLENN(nn.Module):
 
     def forward(self, x, infos):
         x = x.transpose(0, 1)
-        x = x[2:3]
+        x = x[:5]
         # print(x.shape)
         view_pool = []
         
