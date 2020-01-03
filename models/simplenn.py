@@ -47,7 +47,13 @@ class SIMPLENN(nn.Module):
             nn.Dropout(),
         )
         self.finalout = nn.Sequential(
-            nn.Linear(6,3)
+            nn.Linear(6,32)
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(32, 32),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(32, 3),
         )
 
     def forward(self, x, infos):
