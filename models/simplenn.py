@@ -50,15 +50,15 @@ class SIMPLENN(nn.Module):
             nn.Linear(6,32),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(32, 32),
-            nn.ReLU(inplace=True),
-            nn.Dropout(),
+            # nn.Linear(32, 32),
+            # nn.ReLU(inplace=True),
+            # nn.Dropout(),
             nn.Linear(32, 3),
         )
 
     def forward(self, x, infos):
         x = x.transpose(0, 1)
-        # x = x[:5]
+        x = x[:5]
         # print(x.shape)
         view_pool = []
         
