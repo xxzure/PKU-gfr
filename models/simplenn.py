@@ -26,10 +26,10 @@ class SIMPLENN(nn.Module):
         #     nn.MaxPool2d(kernel_size=3, stride=2),
         # )
         self.features = nn.Sequential(
-            nn.Conv2d(1, 32, kernel_size=3, padding=1),
+            nn.Conv2d(1, 16, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
-            nn.Conv2d(32, 16, kernel_size=3, padding=1),
+            nn.Conv2d(16, 16, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
         )
@@ -44,24 +44,22 @@ class SIMPLENN(nn.Module):
         # )
         self.rnn = nn.LSTM(3600,256,2)
         self.out = nn.Sequential(
-            # nn.Linear(512, 256),
-            # nn.ReLU(inplace=True),
-            # nn.Dropout(),
+            nn.Linear(3600, 256),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
             nn.Linear(256, 64),
             nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(64, 2),
-            nn.ReLU(inplace=True),
-            nn.Dropout(),
         )
         self.finalout = nn.Sequential(
-            nn.Linear(6,32),
+            nn.Linear(6,16),
             nn.ReLU(inplace=True),
             nn.Dropout(),
             # nn.Linear(32, 32),
             # nn.ReLU(inplace=True),
             # nn.Dropout(),
-            nn.Linear(32, 3),
+            nn.Linear(16, 3),
         )
 
     def forward(self, x, infos):
@@ -78,9 +76,9 @@ class SIMPLENN(nn.Module):
         
         view_pool = torch.stack(view_pool)
         # print(view_pool.shape)
-        out,h = self.rnn(view_pool)
+        # out,h = self.rnn(view_pool)
         # print(h.shape)
-        predict = self.out(out)
+        predict = self.out(view_pool)
         # print(predict.shape)
         predict = torch.squeeze(predict[-1::])
 
