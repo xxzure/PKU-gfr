@@ -121,7 +121,7 @@ def load_checkpoint():
 def train():
     train_size = len(train_loader)
     
-    for i, (inputs, targets) in enumerate(train_loader):
+    for i, (inputs, targets, infos) in enumerate(train_loader):
         # Convert from list of 3D to 4D
 
         inputs = np.stack(inputs, axis=1)
@@ -132,14 +132,19 @@ def train():
 
         targets = torch.from_numpy(targets)
         targets = targets.float()
+
+        infos = np.stack(infos, axis=1)
+
+        infos = torch.from_numpy(infos)
+        infos = infos.float()
         
         # GPU!!!
         if torch.cuda.is_available():
-            inputs, targets = inputs.cuda(device), targets.cuda(device)
-        inputs, targets = Variable(inputs), Variable(targets)
+            inputs, targets, infos = inputs.cuda(device), targets.cuda(device), infos.cuda(device)
+        inputs, targets, infos = Variable(inputs), Variable(targets), Variable(infos)
 
         # compute output
-        outputs = model(inputs)
+        outputs = model(inputs,infos)
         loss = criterion(outputs, targets)
 
         # compute gradient and do SGD step
@@ -163,7 +168,7 @@ def eval(data_loader, is_test=False):
     total_loss = 0.0
     n = 0
 
-    for i, (inputs, targets) in enumerate(data_loader):
+    for i, (inputs, targets, infos) in enumerate(data_loader):
         with torch.no_grad():
             # Convert from list of 3D to 4D
             
@@ -174,13 +179,18 @@ def eval(data_loader, is_test=False):
 
             targets = torch.from_numpy(targets)
             targets = targets.float()
-            
+
+            infos = np.stack(infos, axis=1)
+
+            infos = torch.from_numpy(infos)
+            infos = infos.float()
+                
             if torch.cuda.is_available():
-                inputs, targets = inputs.cuda(device), targets.cuda(device)
-            inputs, targets = Variable(inputs), Variable(targets)
+                inputs, targets, infos = inputs.cuda(device), targets.cuda(device), infos.cuda(device)
+            inputs, targets, infos = Variable(inputs), Variable(targets), Variable(infos)
 
             # compute output
-            outputs = model(inputs)
+            outputs = model(inputs,infos)
             print("outputs:",outputs)
             print("targets:",targets)
             loss = criterion(outputs, targets)
