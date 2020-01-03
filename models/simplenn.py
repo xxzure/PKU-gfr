@@ -25,16 +25,16 @@ class SIMPLENN(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
         )
-        self.classifier = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(256 * 6 * 6, 4096),
-            nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(4096, 4096),
-            nn.ReLU(inplace=True),
-            nn.Linear(4096, 2),
-        )
-        self.rnn = nn.LSTM(4096,256,2)
+        # self.classifier = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(256, 64),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(64, 2),
+        # )
+        self.rnn = nn.LSTM(256,256,2)
         self.out = nn.Sequential(
             # nn.Linear(512, 256),
             # nn.ReLU(inplace=True),
@@ -63,9 +63,9 @@ class SIMPLENN(nn.Module):
         view_pool = []
         
         for v in x:
-            # v = self.features(v)
+            v = self.features(v)
             # print(v.shape)
-            v = v.view(v.size(0), 64*64*1)
+            v = v.view(v.size(0), 256)
             view_pool.append(v)
         
         view_pool = torch.stack(view_pool)
