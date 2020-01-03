@@ -10,18 +10,29 @@ class SIMPLENN(nn.Module):
 
     def __init__(self):
         super(SIMPLENN, self).__init__()
+        # self.features = nn.Sequential(
+        #     nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2),
+        #     nn.ReLU(inplace=True),
+        #     nn.MaxPool2d(kernel_size=3, stride=2),
+        #     nn.Conv2d(64, 192, kernel_size=5, padding=2),
+        #     nn.ReLU(inplace=True),
+        #     nn.MaxPool2d(kernel_size=3, stride=2),
+        #     nn.Conv2d(192, 384, kernel_size=3, padding=1),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv2d(384, 256, kernel_size=3, padding=1),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv2d(256, 256, kernel_size=3, padding=1),
+        #     nn.ReLU(inplace=True),
+        #     nn.MaxPool2d(kernel_size=3, stride=2),
+        # )
         self.features = nn.Sequential(
-            nn.Conv2d(1, 64, kernel_size=11, stride=4, padding=2),
+            nn.Conv2d(1, 32, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
-            nn.Conv2d(64, 192, kernel_size=5, padding=2),
+            nn.Conv2d(32, 16, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
-            nn.Conv2d(192, 384, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(384, 256, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(256, 256, kernel_size=3, padding=1),
+            nn.Conv2d(16, 16, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=3, stride=2),
         )
@@ -34,7 +45,7 @@ class SIMPLENN(nn.Module):
         #     nn.ReLU(inplace=True),
         #     nn.Linear(64, 2),
         # )
-        self.rnn = nn.LSTM(256,256,2)
+        self.rnn = nn.LSTM(784,256,2)
         self.out = nn.Sequential(
             # nn.Linear(512, 256),
             # nn.ReLU(inplace=True),
@@ -64,8 +75,8 @@ class SIMPLENN(nn.Module):
         
         for v in x:
             v = self.features(v)
-            # print(v.shape)
-            v = v.view(v.size(0), 256)
+            # print(v.shape) #[8,16,7,7]
+            v = v.view(v.size(0), 16*7*7)
             view_pool.append(v)
         
         view_pool = torch.stack(view_pool)
