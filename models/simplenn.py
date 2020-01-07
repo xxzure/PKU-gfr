@@ -42,15 +42,15 @@ class SIMPLENN(nn.Module):
         #     nn.ReLU(inplace=True),
         #     nn.Linear(64, 2),
         # )
-        self.rnn = nn.LSTM(3600,256,2)
+        self.rnn = nn.LSTM(4096,256,2)
         self.out = nn.Sequential(
-            nn.Linear(3600, 256),
+            nn.Linear(256, 256),
             nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(256, 64),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(64, 2),
+            nn.Linear(64, 3),
         )
         self.finalout = nn.Sequential(
             nn.Linear(6,16),
@@ -64,27 +64,27 @@ class SIMPLENN(nn.Module):
 
     def forward(self, x, infos):
         x = x.transpose(0, 1)
-        x = x[2:3]
+        x = x[:3]
         # print(x.shape)
         view_pool = []
         
         for v in x:
-            v = self.features(v)
-            # print(v.shape) #[8,16,7,7]
-            v = v.view(v.size(0), 16*15*15)
+            # v = self.features(v)
+            # print(v.shape) 
+            v = v.view(v.size(0), 64*64)
             view_pool.append(v)
         
         view_pool = torch.stack(view_pool)
         # print(view_pool.shape)
-        # out,h = self.rnn(view_pool)
+        out,h = self.rnn(view_pool)
         # print(h.shape)
-        predict = self.out(view_pool)
+        predict = self.out(out)
         # print(predict.shape)
         predict = torch.squeeze(predict[-1::])
 
-        info_inputs = torch.cat((predict,infos),-1)
-        # print(info_inputs.shape)
-        predict = self.finalout(info_inputs)
+        # info_inputs = torch.cat((predict,infos),-1)
+        # # print(info_inputs.shape)
+        # predict = self.finalout(info_inputs)
         # pooled_view = view_pool[0]
         # for i in range(1, len(view_pool)):
         #     pooled_view = torch.max(pooled_view, view_pool[i])
