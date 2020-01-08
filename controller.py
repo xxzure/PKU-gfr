@@ -24,7 +24,7 @@ SIMPLENN = 'simplenn'
 MODELS = [RESNET,MVCNN,SIMPLENN]
 
 parser = argparse.ArgumentParser(description='MVCNN-PyTorch')
-parser.add_argument('--data', default='data', metavar='DIR', help='path to dataset')
+parser.add_argument('--data', default='new_data', metavar='DIR', help='path to dataset')
 parser.add_argument('--depth', choices=[18, 34, 50, 101, 152], type=int, metavar='N', default=101, help='resnet depth (default: resnet18)')
 parser.add_argument('--model', '-m', metavar='MODEL', default=SIMPLENN, choices=MODELS,
                     help='pretrained model: ' + ' | '.join(MODELS) + ' (default: {})'.format(RESNET))
@@ -50,7 +50,7 @@ args = parser.parse_args()
 print('Loading data')
 
 transform = transforms.Compose([
-    transforms.Resize((64,64)),
+    transforms.Resize((64,32)),
     transforms.ToTensor(),
 ])
 

@@ -27,12 +27,12 @@ class MultiViewDataSet(Dataset):
         # root / <train/test> / <item> / <view>.png
         for item in os.listdir(root + '/' + data_type):
             views = []
-            path = root + '/' + data_type + '/' + item
+            path = root + '/' + data_type + '/' + item + '/left'
             if os.path.isdir(path):
-                for view in os.listdir(root + '/' + data_type + '/' + item):
-                    views.append(root + '/' + data_type + '/' + item + '/' + view)
+                for view in os.listdir(path):
+                    views.append(path + '/' + view)
                 self.x.append(views)
-                self.gfr.append([self.data_dict[item][0],self.data_dict[item][1],self.data_dict[item][2]])
+                self.gfr.append([self.data_dict[item][0]])#,self.data_dict[item][1],self.data_dict[item][2]])
                 self.info.append([self.data_dict[item][3],self.data_dict[item][4],self.data_dict[item][5],self.data_dict[item][6]])
 
     # Override to give PyTorch access to any image on the dataset

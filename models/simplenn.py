@@ -42,7 +42,7 @@ class SIMPLENN(nn.Module):
         #     nn.ReLU(inplace=True),
         #     nn.Linear(64, 2),
         # )
-        self.rnn = nn.LSTM(4096,256,2)
+        self.rnn = nn.LSTM(2048,256,2)
         self.out = nn.Sequential(
             nn.Linear(256, 256),
             nn.ReLU(inplace=True),
@@ -50,7 +50,7 @@ class SIMPLENN(nn.Module):
             nn.Linear(256, 64),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(64, 3),
+            nn.Linear(64, 1),
         )
         self.finalout = nn.Sequential(
             nn.Linear(6,16),
@@ -59,7 +59,7 @@ class SIMPLENN(nn.Module):
             # nn.Linear(32, 32),
             # nn.ReLU(inplace=True),
             # nn.Dropout(),
-            nn.Linear(16, 3),
+            nn.Linear(16, 1),
         )
 
     def forward(self, x, infos):
@@ -71,7 +71,7 @@ class SIMPLENN(nn.Module):
         for v in x:
             # v = self.features(v)
             # print(v.shape) 
-            v = v.view(v.size(0), 64*64)
+            v = v.view(v.size(0), 64*32)
             view_pool.append(v)
         
         view_pool = torch.stack(view_pool)
@@ -80,7 +80,7 @@ class SIMPLENN(nn.Module):
         # print(h.shape)
         predict = self.out(out)
         # print(predict.shape)
-        predict = torch.squeeze(predict[-1::])
+        predict = torch.squeeze(predict[-1::], 0)
 
         # info_inputs = torch.cat((predict,infos),-1)
         # # print(info_inputs.shape)
