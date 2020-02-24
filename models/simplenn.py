@@ -64,7 +64,7 @@ class SIMPLENN(nn.Module):
 
     def forward(self, x, infos):
         x = x.transpose(0, 1)
-        x = x[:3]
+        # x = x[:3]
         # print(x.shape)
         view_pool = []
         
