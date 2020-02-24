@@ -53,7 +53,7 @@ class SIMPLENN(nn.Module):
             nn.Linear(64, 1),
         )
         self.finalout = nn.Sequential(
-            nn.Linear(6,16),
+            nn.Linear(5,16),
             nn.ReLU(inplace=True),
             nn.Dropout(),
             # nn.Linear(32, 32),
