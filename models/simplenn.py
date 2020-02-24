@@ -85,13 +85,16 @@ class SIMPLENN(nn.Module):
         info_inputs = torch.cat((predict,infos),-1)
         # print(info_inputs.shape)
         predict = self.finalout(info_inputs)
-        pooled_view = view_pool[0]
-        for i in range(1, len(view_pool)):
-            pooled_view = torch.max(pooled_view, view_pool[i])
+
+
+        # useless!
+        # pooled_view = view_pool[0]
+        # for i in range(1, len(view_pool)):
+        #     pooled_view = torch.max(pooled_view, view_pool[i])
         
-        pooled_view = self.classifier(pooled_view)
-        return pooled_view
-        # return predict
+        # pooled_view = self.classifier(pooled_view)
+        # return pooled_view
+        return predict
 
 
 def simplenn(pretrained=False, **kwargs):
