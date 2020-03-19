@@ -117,9 +117,9 @@ class ResNet(nn.Module):
             nn.Dropout(),
             nn.Linear(512 * block.expansion, 256),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(256, 256),
-            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            # nn.Linear(256, 256),
+            # nn.ReLU(inplace=True),
             nn.Linear(256, 2),
         )
         self.finalout = nn.Sequential(
