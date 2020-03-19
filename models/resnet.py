@@ -139,7 +139,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def forward(self, x):
+    def forward(self, x, infos):
         # Swap batch and views dims
         # [4, 20, 1, 64, 64]
         x = x.transpose(0, 1)
