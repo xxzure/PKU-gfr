@@ -194,8 +194,7 @@ class ResNet(nn.Module):
         # print(out.shape)
         # print(h.shape)
         predict = self.classifier(pooled_view)
-        print(predict.shape)
-        predict = torch.squeeze(predict[-1::], 0)
+    
         info_inputs = torch.cat((predict,infos),-1)
         predict = self.finalout(info_inputs)
         # print(predict.shape)
