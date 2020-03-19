@@ -125,9 +125,9 @@ class ResNet(nn.Module):
         self.finalout = nn.Sequential(
             nn.Linear(7,128),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(128, 128),
-            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            # nn.Linear(128, 128),
+            # nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(128, 2),
         )
@@ -195,8 +195,8 @@ class ResNet(nn.Module):
         # print(h.shape)
         predict = self.classifier(pooled_view)
     
-        info_inputs = torch.cat((predict,infos),-1)
-        predict = self.finalout(info_inputs)
+        # info_inputs = torch.cat((predict,infos),-1)
+        # predict = self.finalout(info_inputs)
         # print(predict.shape)
         # predict = torch.squeeze(predict[-1::])
         

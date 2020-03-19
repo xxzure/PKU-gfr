@@ -31,7 +31,7 @@ parser.add_argument('--model', '-m', metavar='MODEL', default=RESNET, choices=MO
 parser.add_argument('--epochs', default=200, type=int, metavar='N', help='number of total epochs to run (default: 100)')
 parser.add_argument('-b', '--batch-size', default=4, type=int,
                     metavar='N', help='mini-batch size (default: 4)')
-parser.add_argument('--lr', '--learning-rate', default=0.0001, type=float,
+parser.add_argument('--lr', '--learning-rate', default=0.001, type=float,
                     metavar='LR', help='initial learning rate (default: 0.0001)')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum (default: 0.9)')
