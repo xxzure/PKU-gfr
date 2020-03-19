@@ -112,7 +112,7 @@ class ResNet(nn.Module):
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
         self.rnn = nn.RNN(512,64,1)
-        self.out = nn.Linear(64,2)
+        self.out = nn.Linear(512,2)
         
 
         for m in self.modules():
@@ -175,8 +175,8 @@ class ResNet(nn.Module):
         # print(out.shape)
         # print(h.shape)
         predict = self.out(pooled_view)
-        print(predict.shape)
-        predict = torch.squeeze(predict[-1::])
+        # print(predict.shape)
+        # predict = torch.squeeze(predict[-1::])
         
         # pooled_view = view_pool[0]
         # for i in range(1, len(view_pool)):
