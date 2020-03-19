@@ -234,10 +234,10 @@ for epoch in range(start_epoch, n_epochs):
     # util.logEpoch(logger, model, epoch + 1, avg_loss, avg_test_acc)
 
     # Save model
-    if avg_test_acc > best_acc:
-        print('\tSaving checkpoint - Acc: %.2f' % avg_test_acc)
-        best_acc = avg_test_acc
-        best_loss = avg_loss
+    # if avg_test_acc > best_acc:
+    #     print('\tSaving checkpoint - Acc: %.2f' % avg_test_acc)
+    #     best_acc = avg_test_acc
+    #     best_loss = avg_loss
         # util.save_checkpoint({
         #     'epoch': epoch + 1,
         #     'state_dict': model.state_dict(),
