@@ -51,6 +51,7 @@ print('Loading data')
 
 transform = transforms.Compose([
     transforms.Resize((64,64)),
+    transforms.CenterCrop((64, 64)),
     transforms.ToTensor(),
 ])
 
@@ -227,17 +228,15 @@ for epoch in range(start_epoch, n_epochs):
 
     print('\nEvaluation:')
     print('\tVal Loss: %.4f' % avg_loss.item())
-    # print('\tCurrent best val acc: %.2f' % best_acc)
+    print('\tCurrent best val loss: %.2f' % best_loss)
 
     # Log epoch to tensorboard
     # See log using: tensorboard --logdir='logs' --port=6006
     # util.logEpoch(logger, model, epoch + 1, avg_loss, avg_test_acc)
 
     # Save model
-    # if avg_test_acc > best_acc:
-    #     print('\tSaving checkpoint - Acc: %.2f' % avg_test_acc)
-    #     best_acc = avg_test_acc
-    #     best_loss = avg_loss
+    if avg_loss < best_loss:
+        best_loss = avg_loss
         # util.save_checkpoint({
         #     'epoch': epoch + 1,
         #     'state_dict': model.state_dict(),
