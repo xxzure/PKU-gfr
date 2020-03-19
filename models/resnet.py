@@ -112,7 +112,7 @@ class ResNet(nn.Module):
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
         self.rnn = nn.RNN(512,64,1)
-        self.out = nn.Linear(1024,2)
+        self.out = nn.Linear(2048,2)
         
 
         for m in self.modules():
