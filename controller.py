@@ -101,7 +101,7 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
 best_acc = 0.0
-best_loss = 0.0
+best_loss = 2000
 start_epoch = 0
 
 
