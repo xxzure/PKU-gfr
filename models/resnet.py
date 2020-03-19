@@ -142,8 +142,8 @@ class ResNet(nn.Module):
     def forward(self, x, infos):
         # Swap batch and views dims
         # [4, 20, 1, 64, 64]
-        x = x[:5]
         x = x.transpose(0, 1)
+        x = x[:5]
         #print(x.shape)
 
         # View pool
