@@ -166,11 +166,16 @@ class ResNet(nn.Module):
             view_pool.append(v)
         
         # view_pool: [20, 4, 512] 
-        view_pool = torch.stack(view_pool)
-        out,h = self.rnn(view_pool)
+        # view_pool = torch.stack(view_pool)
+        # out,h = self.rnn(view_pool)
+
+        pooled_view = view_pool[0]
+        for i in range(1, len(view_pool)):
+            pooled_view = torch.max(pooled_view, view_pool[i])
         # print(out.shape)
         # print(h.shape)
-        predict = self.out(out)
+        predict = self.out(pooled_view)
+        print(predict.shape)
         predict = torch.squeeze(predict[-1::])
         
         # pooled_view = view_pool[0]
