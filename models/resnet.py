@@ -123,7 +123,6 @@ class ResNet(nn.Module):
             nn.Linear(256, 2),
         )
         self.finalout = nn.Sequential(
-            nn.Dropout(),
             nn.Linear(6, 2),
             # nn.ReLU(inplace=True),
             # # nn.Dropout(),
