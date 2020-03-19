@@ -26,7 +26,7 @@ MODELS = [RESNET,MVCNN,SIMPLENN]
 parser = argparse.ArgumentParser(description='MVCNN-PyTorch')
 parser.add_argument('--data', default='new_data', metavar='DIR', help='path to dataset')
 parser.add_argument('--depth', choices=[18, 34, 50, 101, 152], type=int, metavar='N', default=101, help='resnet depth (default: resnet18)')
-parser.add_argument('--model', '-m', metavar='MODEL', default=SIMPLENN, choices=MODELS,
+parser.add_argument('--model', '-m', metavar='MODEL', default=RESNET, choices=MODELS,
                     help='pretrained model: ' + ' | '.join(MODELS) + ' (default: {})'.format(RESNET))
 parser.add_argument('--epochs', default=200, type=int, metavar='N', help='number of total epochs to run (default: 100)')
 parser.add_argument('-b', '--batch-size', default=8, type=int,
@@ -50,7 +50,7 @@ args = parser.parse_args()
 print('Loading data')
 
 transform = transforms.Compose([
-    transforms.Resize((64,32)),
+    transforms.Resize((64,64)),
     transforms.ToTensor(),
 ])
 
@@ -234,17 +234,17 @@ for epoch in range(start_epoch, n_epochs):
     # util.logEpoch(logger, model, epoch + 1, avg_loss, avg_test_acc)
 
     # Save model
-    # if avg_test_acc > best_acc:
-    #     print('\tSaving checkpoint - Acc: %.2f' % avg_test_acc)
-    #     best_acc = avg_test_acc
-    #     best_loss = avg_loss
-    #     util.save_checkpoint({
-    #         'epoch': epoch + 1,
-    #         'state_dict': model.state_dict(),
-    #         'acc': avg_test_acc,
-    #         'best_acc': best_acc,
-    #         'optimizer': optimizer.state_dict(),
-    #     }, args.model, args.depth)
+    if avg_test_acc > best_acc:
+        print('\tSaving checkpoint - Acc: %.2f' % avg_test_acc)
+        best_acc = avg_test_acc
+        best_loss = avg_loss
+        # util.save_checkpoint({
+        #     'epoch': epoch + 1,
+        #     'state_dict': model.state_dict(),
+        #     'acc': avg_test_acc,
+        #     'best_acc': best_acc,
+        #     'optimizer': optimizer.state_dict(),
+        # }, args.model, args.depth)
 
     # Decaying Learning Rate
     if (epoch + 1) % args.lr_decay_freq == 0:
