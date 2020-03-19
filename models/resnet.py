@@ -113,6 +113,15 @@ class ResNet(nn.Module):
 
         self.rnn = nn.RNN(512,64,1)
         self.out = nn.Linear(2048,2)
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(512 * block.expansion, 256),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(256, 256),
+            nn.ReLU(inplace=True),
+            nn.Linear(256, 2),
+        )
         
 
         for m in self.modules():
@@ -175,7 +184,7 @@ class ResNet(nn.Module):
             pooled_view = torch.max(pooled_view, view_pool[i])
         # print(out.shape)
         # print(h.shape)
-        predict = self.out(pooled_view)
+        predict = self.classifier(pooled_view)
         # print(predict.shape)
         # predict = torch.squeeze(predict[-1::])
         
