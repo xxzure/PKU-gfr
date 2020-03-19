@@ -50,8 +50,8 @@ args = parser.parse_args()
 print('Loading data')
 
 transform = transforms.Compose([
-    transforms.CenterCrop((32, 32)),
     transforms.Resize((64,64)),
+    transforms.CenterCrop((64, 64)),
     transforms.ToTensor(),
 ])
 
