@@ -112,7 +112,7 @@ class ResNet(nn.Module):
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
         self.rnn = nn.RNN(512,64,1)
-        self.out = nn.Linear(2048,2)
+        self.out = nn.Linear(2048,1)
         self.classifier = nn.Sequential(
             nn.Dropout(),
             nn.Linear(512 * block.expansion, 256),
@@ -120,10 +120,10 @@ class ResNet(nn.Module):
             # nn.Dropout(),
             # nn.Linear(256, 256),
             # nn.ReLU(inplace=True),
-            nn.Linear(256, 2),
+            nn.Linear(256, 1),
         )
         self.finalout = nn.Sequential(
-            nn.Linear(7,128),
+            nn.Linear(5,128),
             nn.ReLU(inplace=True),
             # nn.Dropout(),
             # nn.Linear(128, 128),
