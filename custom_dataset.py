@@ -33,7 +33,7 @@ class MultiViewDataSet(Dataset):
                     views.append(path + '/' + view)
                 self.x.append(views)
                 self.gfr.append([self.data_dict[item][0],self.data_dict[item][1]]) #,self.data_dict[item][2]])
-                self.info.append([self.data_dict[item][3],self.data_dict[item][4],self.data_dict[item][5],self.data_dict[item][6],self.data_dict[item][7]])
+                self.info.append([self.data_dict[item][3],self.data_dict[item][5],self.data_dict[item][6],self.data_dict[item][7]])
 
     # Override to give PyTorch access to any image on the dataset
     def __getitem__(self, index):
