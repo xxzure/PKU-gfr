@@ -237,13 +237,12 @@ for epoch in range(start_epoch, n_epochs):
     # Save model
     if avg_loss < best_loss:
         best_loss = avg_loss
-        # util.save_checkpoint({
-        #     'epoch': epoch + 1,
-        #     'state_dict': model.state_dict(),
-        #     'acc': avg_test_acc,
-        #     'best_acc': best_acc,
-        #     'optimizer': optimizer.state_dict(),
-        # }, args.model, args.depth)
+        util.save_checkpoint({
+            'epoch': epoch + 1,
+            'state_dict': model.state_dict(),
+            'best_loss': best_loss,
+            'optimizer': optimizer.state_dict(),
+        }, args.model, args.depth)
 
     # Decaying Learning Rate
     if (epoch + 1) % args.lr_decay_freq == 0:
