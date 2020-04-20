@@ -29,6 +29,7 @@ def transferDcm(file_path):
     ds = sitk.ReadImage(file_path)
     img_array = sitk.GetArrayFromImage(ds)
     img_array = np.asarray(img_array[-20:, :, :])
+    print(img_array.shape)
     return img_array
 
 device = torch.device("cpu")
