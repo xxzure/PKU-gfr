@@ -28,7 +28,7 @@ transform = transforms.Compose([
 def transferDcm(file_path):
     ds = sitk.ReadImage(file_path)
     img_array = sitk.GetArrayFromImage(ds)
-    img_array = img_array[-20:, :, :]
+    img_array = np.asarray(img_array[-20:, :, :])
     return img_array
 
 device = torch.device("cpu")
