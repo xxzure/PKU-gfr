@@ -52,6 +52,9 @@ def load_checkpoint(resume = "checkpoint/resnet101_checkpoint.pth.tar"):
 
 if __name__ == "__main__":
     file_path = sys.argv[1]
+    infos = np.array([sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]])
+    infos = torch.from_numpy(infos)
+    infos = infos.float()
     raw_data = transferDcm(file_path)
     views = []
     for i in range(20):
@@ -63,6 +66,6 @@ if __name__ == "__main__":
     data = torch.stack(views)
     data = data.unsqueeze(0)
     net = load_checkpoint()
-    outputs = model(data)
+    outputs = model(data, infos)
     print(outputs)
 
