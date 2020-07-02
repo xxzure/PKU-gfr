@@ -180,7 +180,7 @@ class ResNet(nn.Module):
         
             v = self.avgpool(v)
             v = v.view(v.size(0), -1)
-            print(v.shape)
+            # print(v.shape)
             # [batch_size, 512] 
             view_pool.append(v)
         

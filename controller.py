@@ -103,6 +103,12 @@ optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 best_acc = 0.0
 best_loss = 2000
 start_epoch = 0
+best_mean1 = 0
+best_mean2 = 0
+best_std1 = 0
+best_std2 = 0
+
+train_loss = []
 
 
 # Helper functions
@@ -121,6 +127,8 @@ def load_checkpoint():
 
 def train():
     train_size = len(train_loader)
+    batch_loss = 0
+    n = 0
     
     for i, (inputs, targets, infos) in enumerate(train_loader):
         # Convert from list of 3D to 4D
@@ -155,6 +163,9 @@ def train():
 
         if (i + 1) % args.print_freq == 0:
             print("\tIter [%d/%d] Loss: %.4f" % (i + 1, train_size, loss.item()))
+        batch_loss += loss.item()
+        n += 1
+    train_loss.append(batch_loss / n)
 
 
 # Validation and Testing
@@ -163,15 +174,14 @@ def eval(data_loader, is_test=False):
         load_checkpoint()
 
     # Eval
-    total = 0.0
-    correct = 0.0
-
     total_loss = 0.0
     n = 0
 
+    output_num = 0
+    target_num = 0
+
     for i, (inputs, targets, infos) in enumerate(data_loader):
         with torch.no_grad():
-            # Convert from list of 3D to 4D
             
             inputs = np.stack(inputs, axis=1)
 
@@ -192,21 +202,34 @@ def eval(data_loader, is_test=False):
 
             # compute output
             outputs = model(inputs,infos)
-            print("outputs:",outputs)
-            print("targets:",targets)
             loss = criterion(outputs, targets)
+            if i == 0:
+                output_num = outputs
+                target_num = targets
+            else:
+                output_num = torch.cat((output_num, outputs), 0)
+                target_num = torch.cat((target_num, targets), 0)
 
             total_loss += loss
             n += 1
 
-            # _, predicted = torch.max(outputs.data, 1)
-            # total += targets.size(0)
-            # correct += (predicted.cpu() == targets.cpu()).sum()
-
-    # avg_test_acc = 100 * correct / total
+    # print("output_num:",output_num)
+    output = output_num.cpu().numpy()
+    output_all = np.add(output[0][0], output[0][1])
+    for i in range(1, len(output)):
+        t = output[i][0] + output[i][1]
+        output_all = np.append(output_all, t)
+    # print("all: ", output_all)
+    mean1 = output_num.mean(0)
+    std1 = output_num.std(0)
+    mean2 = np.mean(output_all, 0)
+    std2 = np.std(output_all, 0)
+    print("mean: ",mean1, mean2)
+    print("std: ", std1, std2)
+    
     avg_loss = total_loss / n
 
-    return avg_loss
+    return avg_loss, mean1, mean2, std1, std2
 
 h_state = None
 
@@ -224,11 +247,13 @@ for epoch in range(start_epoch, n_epochs):
     print('Time taken: %.2f sec.' % (time.time() - start))
 
     model.eval()
-    avg_loss = eval(val_loader)
+    avg_loss, mean1, mean2, std1, std2 = eval(val_loader)
 
     print('\nEvaluation:')
     print('\tVal Loss: %.4f' % avg_loss.item())
     print('\tCurrent best val loss: %.2f' % best_loss)
+    print('\tmean std: ', best_mean1, best_std1, best_mean2, best_std2)
+    print('\ttrain_loss: ', train_loss)
 
     # Log epoch to tensorboard
     # See log using: tensorboard --logdir='logs' --port=6006
@@ -237,6 +262,10 @@ for epoch in range(start_epoch, n_epochs):
     # Save model
     if avg_loss < best_loss:
         best_loss = avg_loss
+        best_mean1 = mean1
+        best_mean2 = mean2
+        best_std1 = std1
+        best_std2 = std2
         util.save_checkpoint({
             'epoch': epoch + 1,
             'state_dict': model.state_dict(),
